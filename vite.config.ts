@@ -31,6 +31,7 @@ export default defineConfig((config) => {
       sentryReactRouter(sentryConfig, config),
       tsconfigPaths(),
     ],
+    base: "/Tourvisto/",
     ssr: {
       noExternal: [/@syncfusion/],
     },
