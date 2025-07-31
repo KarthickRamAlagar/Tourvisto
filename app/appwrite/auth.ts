@@ -64,18 +64,18 @@ const getGooglePicture = async (accessToken: string) => {
 export const loginWithGoogle = async () => {
   try {
     const isProd =
-      window.location.origin === "https://tourvisto-ten.vercel.app";
+      window.location.origin === "https://tourvisto-ai.vercel.app";
 
     const successUrl =
       import.meta.env.VITE_SUCCESS_URL ||
       (isProd
-        ? "https://tourvisto-ten.vercel.app/"
+        ? "https://tourvisto-ai.vercel.app/"
         : `${window.location.origin}/`);
 
     const failureUrl =
       import.meta.env.VITE_FAILURE_URL ||
       (isProd
-        ? "https://tourvisto-ten.vercel.app/"
+        ? "https://tourvisto-ai.vercel.app/"
         : `${window.location.origin}/404`);
 
     await account.createOAuth2Session(
