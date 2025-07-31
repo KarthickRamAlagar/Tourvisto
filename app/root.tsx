@@ -35,7 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        <link rel="icon" href="/public/assets/icons/logo.svg" />
+        <link rel="icon" href="/assets/icons/logo.svg" />
         <title>
           Tourvisto - "A Travel AI Agent Who had responsibilty to override the
           role of agencies"

@@ -11,7 +11,7 @@ const MobileSideBar = () => {
   return (
     <div className="mobile-sidebar wrapper">
       <header>
-        <Link to="/dashboard" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <img
             src="/assets/icons/logo.svg"
             alt="logo"

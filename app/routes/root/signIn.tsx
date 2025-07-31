@@ -6,7 +6,7 @@ import { account } from "~/appwrite/client";
 export async function clientLoader() {
   try {
     const user = await account.get();
-    if (user.$id) return redirect("/dashboard");
+    if (user.$id) return redirect("/");
   } catch (e) {
     console.log("Error fetching user", e);
   }
@@ -18,7 +18,7 @@ const SignIn = () => {
       <section className="size-full glassmorphism flex-center px-6">
         <div className="sign-in-card">
           <header className="header">
-            <Link to="/dashboard">
+            <Link to="/">
               <img
                 src="/assets/icons/logo.svg"
                 alt="logo"
