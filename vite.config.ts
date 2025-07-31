@@ -31,7 +31,7 @@ export default defineConfig((config) => {
       sentryReactRouter(sentryConfig, config),
       tsconfigPaths(),
     ],
-
+    base: "/",
     ssr: {
       noExternal: [/@syncfusion/],
     },
