@@ -63,10 +63,25 @@ const getGooglePicture = async (accessToken: string) => {
 
 export const loginWithGoogle = async () => {
   try {
-    account.createOAuth2Session(
+    const isProd =
+      window.location.origin === "https://tourvisto-ten.vercel.app";
+
+    const successUrl =
+      import.meta.env.VITE_SUCCESS_URL ||
+      (isProd
+        ? "https://tourvisto-ten.vercel.app/success"
+        : `${window.location.origin}/`);
+
+    const failureUrl =
+      import.meta.env.VITE_FAILURE_URL ||
+      (isProd
+        ? "https://tourvisto-ten.vercel.app/failure"
+        : `${window.location.origin}/404`);
+
+    await account.createOAuth2Session(
       OAuthProvider.Google,
-      `${window.location.origin}/`,
-      `${window.location.origin}/404`
+      successUrl,
+      failureUrl
     );
   } catch (error) {
     console.error("Error during OAuth2 session creation:", error);
