@@ -1,15 +1,12 @@
 {
   "name": "Tourvisto",
-  "homepage": "https://KarthickRamAlagar.github.io/Tourvisto/",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
