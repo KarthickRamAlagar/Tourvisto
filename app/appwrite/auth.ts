@@ -69,13 +69,13 @@ export const loginWithGoogle = async () => {
     const successUrl =
       import.meta.env.VITE_SUCCESS_URL ||
       (isProd
-        ? "https://tourvisto-ten.vercel.app/success"
+        ? "https://tourvisto-ten.vercel.app/"
         : `${window.location.origin}/`);
 
     const failureUrl =
       import.meta.env.VITE_FAILURE_URL ||
       (isProd
-        ? "https://tourvisto-ten.vercel.app/failure"
+        ? "https://tourvisto-ten.vercel.app/"
         : `${window.location.origin}/404`);
 
     await account.createOAuth2Session(
