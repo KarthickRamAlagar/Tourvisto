@@ -18,7 +18,7 @@ export const loader = async () => {
     status: user.email === "karthickramalagar@gmail.com" ? "admin" : "user",
   }));
 
-  // ✅ Deduplicate by name: keep first occurrence only
+  //  Deduplicate by name: keep first occurrence only
   const uniqueUsers = mappedUsers.filter(
     (user, index, self) => self.findIndex((u) => u.name === user.name) === index
   );
