@@ -19,7 +19,7 @@
   <p>
 <strong>TrourVisto</strong> is an AI-powered, full-stack travel application designed to eliminate the need for traditional travel agencies by connecting users directly to AI-driven itineraries, recommendations, and real-time travel assistance.
   </p>
-  <p><a href="https://your-live-demo-link.com" target="_blank"><strong>🌐 Live Demo</strong></a></p>
+  <p><a href="https://tourvisto-ai.vercel.app/#" target="_blank"><strong>🌐 Take A Step to override the Agentcy </strong></a></p>
 </div>
 
 ---
