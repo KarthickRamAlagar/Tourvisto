@@ -11,29 +11,6 @@ import {
   ChipsDirective,
 } from "@syncfusion/ej2-react-buttons";
 import { allTrips, interests } from "~/constants";
-
-// export const loader = async ({ params }: LoaderFunctionArgs) => {
-//   const { tripId } = params;
-
-//   if (!tripId) throw new Error("Trip ID is required");
-
-//   // for parallel fetch at a same time not depends on each others => reduce the ;oad page into half
-//   const [trip, trips] = await Promise.all([
-//     getTripById(tripId),
-//     getAllTrips(5, 0),
-//   ]);
-//   console.log("getAllTrips response:", trips);
-
-//   return {
-//     trip,
-//     allTrips: trips.allTrip.map(({ $id, TripDetail, imageUrls }) => ({
-//       id: $id,
-//       ...parseTripData(tripDetail),
-//       imageUrls: imageUrls ?? [],
-//     })),
-//   };
-// };
-
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { tripId } = params;
   if (!tripId) throw new Error("Trip ID is required");
