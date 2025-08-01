@@ -119,8 +119,8 @@
 ## 🛠 Installation
 
 ```bash
-git clone https://github.com/KarthickRamAlagar/Trourvisto.git
-cd trourvisto
+git clone https://github.com/KarthickRamAlagar/Tourvisto.git
+cd tourvisto
 npm install
 ```
 
