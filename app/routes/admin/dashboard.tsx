@@ -54,7 +54,7 @@ export async function clientLoader() {
     count: user.itineraryCount ?? Math.floor(Math.random() * 10),
   }));
 
-  // ✅ Filter out duplicate names, keeping only the first one
+  // Filter out duplicate names, keeping only the first one
   const uniqueUsersByName = mappedUsers.filter(
     (user, index, self) => self.findIndex((u) => u.name === user.name) === index
   );
