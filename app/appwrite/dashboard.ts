@@ -364,40 +364,40 @@ export const getTripsCreatedPerDay = async () => {
 //     : chartData;
 // };
 
-// export const getTripsByTravelStyle = async () => {
-//   const trips = await database.listDocuments(
-//     appwriteConfig.databaseId,
-//     appwriteConfig.tripCollectionId
-//   );
+export const getTripsByTravelStyle = async () => {
+  const trips = await database.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.tripCollectionId
+  );
 
-//   const travelStyleCounts: Record<string, number> = {};
-//   const fallbackCount = trips.documents.reduce((count, trip) => {
-//     const parsed = parseTripData(trip.tripDetails);
-//     if (parsed.travelStyle && typeof parsed.travelStyle === "string") {
-//       const normalized = parsed.travelStyle.trim().toLowerCase();
-//       travelStyleCounts[normalized] = (travelStyleCounts[normalized] || 0) + 1;
-//     } else {
-//       count++;
-//     }
-//     return count;
-//   }, 0);
+  const travelStyleCounts: Record<string, number> = {};
+  const fallbackCount = trips.documents.reduce((count, trip) => {
+    const parsed = parseTripData(trip.tripDetails);
+    if (parsed.travelStyle && typeof parsed.travelStyle === "string") {
+      const normalized = parsed.travelStyle.trim().toLowerCase();
+      travelStyleCounts[normalized] = (travelStyleCounts[normalized] || 0) + 1;
+    } else {
+      count++;
+    }
+    return count;
+  }, 0);
 
-//   if (fallbackCount > 0) {
-//     travelStyleCounts["luxury"] =
-//       (travelStyleCounts["luxury"] || 0) + fallbackCount;
-//   }
+  if (fallbackCount > 0) {
+    travelStyleCounts["luxury"] =
+      (travelStyleCounts["luxury"] || 0) + fallbackCount;
+  }
 
-//   const chartData = Object.entries(travelStyleCounts).map(
-//     ([travelStyle, count]) => ({
-//       count,
-//       travelStyle,
-//     })
-//   );
+  const chartData = Object.entries(travelStyleCounts).map(
+    ([travelStyle, count]) => ({
+      count,
+      travelStyle,
+    })
+  );
 
-//   return chartData.length === 0
-//     ? [{ travelStyle: "luxury", count: 1 }]
-//     : chartData;
-// };
+  return chartData.length === 0
+    ? [{ travelStyle: "luxury", count: 1 }]
+    : chartData;
+};
 
 // export const getTripsByTravelStyle = async () => {
 //   const trips = await database.listDocuments(
@@ -432,60 +432,111 @@ export const getTripsCreatedPerDay = async () => {
 //   }));
 // };
 
-export const getTripsByTravelStyle = async () => {
-  try {
-    const trips = await database.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.tripCollectionId,
-      [Query.orderDesc("$createdAt")] // Get newest trips first
-    );
+// Helper function
 
-    // Debug: Log first 3 trips to verify data
-    console.log(
-      "Sample trips:",
-      trips.documents.slice(0, 3).map((t) => ({
-        id: t.$id,
-        travelStyle: t.travelStyle,
-        hasDetails: !!t.tripDetails,
-        parsedStyle: parseTripData(t.tripDetails)?.travelStyle,
-      }))
-    );
+// export const getTripsByTravelStyle = async () => {
+//   const trips = await database.listDocuments(
+//     appwriteConfig.databaseId,
+//     appwriteConfig.tripCollectionId
+//   );
 
-    const styleCounts = trips.documents.reduce(
-      (acc, trip) => {
-        try {
-          // First try direct property, then parsed details
-          const style =
-            trip.travelStyle || parseTripData(trip.tripDetails)?.travelStyle;
+//   const counts = trips.documents.reduce(
+//     (acc, trip) => {
+//       const parsed = parseTripData(trip.tripDetails);
 
-          if (style && typeof style === "string") {
-            const normalized = style.toLowerCase().trim();
-            acc[normalized] = (acc[normalized] || 0) + 1;
-          }
-        } catch (error) {
-          console.error("Error processing trip:", trip.$id, error);
-        }
-        return acc;
-      },
-      {} as Record<string, number>
-    );
+//       if (parsed.travelStyle) {
+//         const style = parsed.travelStyle.toLowerCase().trim();
+//         acc[style] = (acc[style] || 0) + 1;
+//       }
+//       return acc;
+//     },
+//     {} as Record<string, number>
+//   );
 
-    // Format for chart
-    const chartData = Object.entries(styleCounts).map(([style, count]) => ({
-      travelStyle: style.charAt(0).toUpperCase() + style.slice(1), // Capitalize
-      count,
-    }));
+//   return Object.entries(counts).map(([style, count]) => ({
+//     travelStyle: style,
+//     count,
+//   }));
+// };
 
-    console.log("Processed trip styles:", chartData);
+// export const getTripsByTravelStyle = async () => {
+//   const trips = await database.listDocuments(
+//     appwriteConfig.databaseId,
+//     appwriteConfig.tripCollectionId
+//   );
 
-    return chartData.length > 0
-      ? chartData
-      : [{ travelStyle: "Luxury", count: 0 }]; // Empty state
-  } catch (error) {
-    console.error("Failed to get trips by style:", error);
-    return [{ travelStyle: "Luxury", count: 0 }];
-  }
-};
+//   const counts = trips.documents.reduce(
+//     (acc, trip) => {
+//       const parsed = parseTripData(trip.tripDetails);
+
+//       if (parsed.travelStyle) {
+//         const style = parsed.travelStyle.toLowerCase().trim();
+//         acc[style] = (acc[style] || 0) + 1;
+//       }
+//       return acc;
+//     },
+//     {} as Record<string, number>
+//   );
+
+//   return Object.entries(counts).map(([style, count]) => ({
+//     travelStyle: style,
+//     count,
+//   }));
+// };
+
+// export const getTripsByTravelStyle = async () => {
+//   try {
+//     const trips = await database.listDocuments(
+//       appwriteConfig.databaseId,
+//       appwriteConfig.tripCollectionId,
+//       [Query.orderDesc("$createdAt")]
+//     );
+
+//     // Debugging: Log sample trips
+//     console.log(
+//       "Sample trips:",
+//       trips.documents.slice(0, 3).map((t) => ({
+//         id: t.$id,
+//         hasDetails: !!t.tripDetails,
+//         travelStyle: t.travelStyle || parseTripData(t.tripDetails)?.travelStyle,
+//       }))
+//     );
+
+//     const styleCounts = trips.documents.reduce(
+//       (acc, trip) => {
+//         try {
+//           // Try both direct property and parsed details
+//           const style =
+//             trip.travelStyle || parseTripData(trip.tripDetails)?.travelStyle;
+
+//           if (typeof style === "string") {
+//             const normalized = style.toLowerCase().trim();
+//             acc[normalized] = (acc[normalized] || 0) + 1;
+//           }
+//         } catch (error) {
+//           console.error("Error processing trip:", trip.$id, error);
+//         }
+//         return acc;
+//       },
+//       {} as Record<string, number>
+//     );
+
+//     // Format for chart
+//     const chartData = Object.entries(styleCounts).map(([style, count]) => ({
+//       travelStyle: capitalizeFirstLetter(style),
+//       count,
+//     }));
+
+//     console.log("Processed trip styles:", chartData);
+
+//     return chartData.length > 0
+//       ? chartData
+//       : [{ travelStyle: "Luxury", count: 0 }];
+//   } catch (error) {
+//     console.error("Failed to get trips by style:", error);
+//     return [{ travelStyle: "Luxury", count: 0 }];
+//   }
+// };
 
 const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);

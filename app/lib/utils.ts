@@ -28,46 +28,44 @@ export function parseMarkdownToJson(markdownText: string): unknown | null {
     return null;
   }
 }
-// export function parseTripData(data: unknown) {
-//   if (
-//     typeof data !== "string" ||
-//     data === "undefined" ||
-//     data === "" ||
-//     !data.trim().startsWith("{")
-//   ) {
-//     return {}; // Silent fallback
-//   }
-
-//   try {
-//     return JSON.parse(data);
-//   } catch {
-//     return {}; // Silent parse fail
-//   }
-// }
-export function parseTripData(
-  data: unknown
-): { travelStyle?: string } & Record<string, unknown> {
-  // Early return for non-string or empty data
-  if (typeof data !== "string" || !data.trim()) {
-    console.warn("parseTripData: Invalid input - expected non-empty string");
-    return { travelStyle: undefined };
+export function parseTripData(data: unknown) {
+  if (
+    typeof data !== "string" ||
+    data === "undefined" ||
+    data === "" ||
+    !data.trim().startsWith("{")
+  ) {
+    return {}; // Silent fallback
   }
 
   try {
-    const parsed = JSON.parse(data);
-
-    // Validate basic structure
-    if (typeof parsed !== "object" || parsed === null) {
-      console.warn("parseTripData: Parsed data is not an object");
-      return { travelStyle: undefined };
-    }
-
-    return parsed;
-  } catch (error) {
-    console.warn("parseTripData: Failed to parse JSON:", error);
-    return { travelStyle: undefined };
+    return JSON.parse(data);
+  } catch {
+    return {}; // Silent parse fail
   }
 }
+// export function parseTripData(data: unknown): { travelStyle?: string } & Record<string, unknown> {
+//   // Early return for non-string or empty data
+//   if (typeof data !== "string" || !data.trim()) {
+//     console.warn('parseTripData: Invalid input - expected non-empty string');
+//     return { travelStyle: undefined };
+//   }
+
+//   try {
+//     const parsed = JSON.parse(data);
+    
+//     // Validate basic structure
+//     if (typeof parsed !== 'object' || parsed === null) {
+//       console.warn('parseTripData: Parsed data is not an object');
+//       return { travelStyle: undefined };
+//     }
+    
+//     return parsed;
+//   } catch (error) {
+//     console.warn('parseTripData: Failed to parse JSON:', error);
+//     return { travelStyle: undefined };
+//   }
+// }
 
 export function getFirstWord(input: unknown): string {
   return String(input).trim().split(/\s+/)[0] || "";

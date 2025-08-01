@@ -12,7 +12,18 @@ import type { Route } from "./+types/all-users";
 
 export const loader = async () => {
   const { users, total } = await getAllUsers(10, 0);
-  return { users, total };
+
+  const mappedUsers: UserData[] = users.map((user) => ({
+    ...user,
+    status: user.email === "karthickramalagar@gmail.com" ? "admin" : "user",
+  }));
+
+  // ✅ Deduplicate by name: keep first occurrence only
+  const uniqueUsers = mappedUsers.filter(
+    (user, index, self) => self.findIndex((u) => u.name === user.name) === index
+  );
+
+  return { users: uniqueUsers, total: uniqueUsers.length };
 };
 
 const AllUsers = ({ loaderData }: Route.componentProps) => {
