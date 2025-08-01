@@ -26,47 +26,93 @@ import {
 import { tripyAxis, userXAxis, useryAxis, tripXAxis } from "~/constants";
 import { GridComponent } from "@syncfusion/ej2-react-grids";
 
+// export async function clientLoader() {
+//   const [user, dashboardStats, trips, userGrowth, tripsByTravels, allUsers] =
+
+//     await Promise.all([
+//       getUser(),
+//       getUsersAndTripsStats(),
+//       getAllTrips(4, 0),
+//       getUserGrowthPerDay(),
+//       getTripsByTravelStyle(),
+//       getAllUsers(4, 0),
+//     ]);
+
+//   const allTrips = (trips.allTrips ?? [])
+//     .map(({ $id, tripDetail, imageUrls }) => {
+//       const parsed = parseTripData(tripDetail);
+//       return {
+//         id: $id,
+//         ...parsed,
+//         imageUrls: imageUrls ?? [],
+//       };
+//     })
+//     .filter((trip) => trip.name); // Optional filter for valid parsed trips
+
+//   const mappedUsers: UsersItineraryCount[] = allUsers.users.map((user) => ({
+//     imageUrl: user.imageUrl,
+//     name: user.name,
+//     count: user.itineraryCount ?? Math.floor(Math.random() * 10),
+//   }));
+
+//   return {
+//     user,
+//     dashboardStats,
+//     allTrips,
+//     userGrowth,
+//     tripsByTravels,
+//     allUsers: mappedUsers,
+//   };
+// }
+
 export async function clientLoader() {
-  const [user, dashboardStats, trips, userGrowth, tripsByTravels, allUsers] =
-    await Promise.all([
-      getUser(),
-      getUsersAndTripsStats(),
-      getAllTrips(4, 0),
-      getUserGrowthPerDay(),
-      getTripsByTravelStyle(),
-      getAllUsers(4, 0),
-    ]);
+  try {
+    const [user, stats, trips, growth, travelStyles, users] = await Promise.all(
+      [
+        getUser(),
+        getUsersAndTripsStats(),
+        getAllTrips(4, 0),
+        getUserGrowthPerDay(),
+        getTripsByTravelStyle(),
+        getAllUsers(4, 0),
+      ]
+    );
 
-  const allTrips = (trips.allTrips ?? [])
-    .map(({ $id, tripDetail, imageUrls }) => {
-      const parsed = parseTripData(tripDetail);
-      return {
-        id: $id,
-        ...parsed,
-        imageUrls: imageUrls ?? [],
-      };
-    })
-    .filter((trip) => trip.name); // Optional filter for valid parsed trips
+    // Process data
+    const allTrips = (trips.allTrips ?? []).map(processTrip);
+    const mappedUsers = users.users.map(processUser);
 
-  const mappedUsers: UsersItineraryCount[] = allUsers.users.map((user) => ({
-    imageUrl: user.imageUrl,
-    name: user.name,
-    count: user.itineraryCount ?? Math.floor(Math.random() * 10),
-  }));
-
-  return {
-    user,
-    dashboardStats,
-    allTrips,
-    userGrowth,
-    tripsByTravels,
-    allUsers: mappedUsers,
-  };
+    return {
+      user,
+      dashboardStats: stats,
+      allTrips,
+      userGrowth: growth,
+      tripsByTravels: travelStyles,
+      allUsers: mappedUsers,
+    };
+  } catch (error) {
+    console.error("Dashboard loader error:", error);
+    throw error;
+  }
 }
 
+// Helper functions
+const processTrip = (trip) => {
+  const parsed = parseTripData(trip.tripDetails);
+  return {
+    id: trip.$id,
+    ...parsed,
+    imageUrls: trip.imageUrls ?? [],
+  };
+};
+
+const processUser = (user) => ({
+  imageUrl: user.imageUrl,
+  name: user.name,
+  count: user.itineraryCount ?? Math.floor(Math.random() * 10),
+});
 export function HydrateFallback() {
   const loading = true;
-
   return (
     <div className="flex flex-col items-center justify-center min-h-[300px] gap-6 text-center mt-10">
       <img
@@ -214,21 +260,23 @@ const Dashboard = ({ loaderData }: Route.componentsProps) => {
         ) : (
           <ChartComponent
             id="chart-2"
-            primaryXAxis={tripXAxis}
-            primaryYAxis={tripyAxis}
+            primaryXAxis={{
+              ...tripXAxis,
+              valueType: "Category",
+              labelIntersectAction: "Rotate45", // Prevent label overlap
+              labelRotation: -45, // Rotate labels for better readability
+            }}
+            primaryYAxis={{
+              ...tripyAxis,
+              minimum: 0, // Always start at 0
+              interval: 1, // Show every integer value
+            }}
             title="Trip Trends"
             tooltip={{ enable: true }}
+            loaded={() => console.log("Trip trends chart loaded")}
           >
-            <Inject
-              services={[
-                ColumnSeries,
-                SplineAreaSeries,
-                Category,
-                DataLabel,
-                Tooltip,
-                Legend,
-              ]}
-            />
+            <Inject services={[ColumnSeries, Category, DataLabel, Tooltip]} />
+
             <SeriesCollectionDirective>
               <SeriesDirective
                 dataSource={tripsByTravels}
@@ -236,17 +284,15 @@ const Dashboard = ({ loaderData }: Route.componentsProps) => {
                 yName="count"
                 type="Column"
                 name="Trips"
-                columnWidth={0.3}
+                columnWidth={0.6}
                 cornerRadius={{ topLeft: 10, topRight: 10 }}
-              />
-              <SeriesDirective
-                dataSource={tripsByTravels}
-                xName="travelStyle"
-                yName="count"
-                type="SplineArea"
-                name="Trend"
-                fill="rgba(255,99,132,0.15)"
-                border={{ width: 2, color: "#ff6384" }}
+                marker={{
+                  dataLabel: {
+                    visible: true,
+                    position: "Top",
+                    font: { fontWeight: "600" },
+                  },
+                }}
               />
             </SeriesCollectionDirective>
           </ChartComponent>

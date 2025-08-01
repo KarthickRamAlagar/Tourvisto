@@ -29,8 +29,9 @@ const SignIn = () => {
           </header>
 
           <article>
-            <h2 className="p-28-semibold text-dark-100 text-center">
-              Start Your Travel Journey with 🧑‍💻
+            <h2 className="p-28-semibold text-dark-100 text-center flex flex-col gap-y-2 sm:gap-y-3 md:flex-row md:gap-3 justify-center items-center leading-relaxed">
+              Start Your Travel Journey with{" "}
+              <span className="mt-2 sm:mt-4 md:mt-0 ">🧑‍💻</span>
             </h2>
 
             <p className="p-18-regular text-center text-gray-100 !leading-7">

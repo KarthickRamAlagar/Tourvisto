@@ -46,8 +46,8 @@ const NavItems = ({ handleClick }: { handleClick: () => void }) => {
             referrerPolicy="no-referrer"
           />
           <article>
-            <h2>{user?.name}</h2>
-            <p>{user?.email}</p>
+            <h2>{user?.name?? 'Guest'}</h2>
+            <p>{user?.email ?? "guest@tourvisto.ai"}</p>
           </article>
           <button onClick={handleLogout} className="cursor-pointer">
             <img
